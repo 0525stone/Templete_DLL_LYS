@@ -32,6 +32,8 @@
             this.textBox_DrawMode = new System.Windows.Forms.TextBox();
             this.button_Point = new System.Windows.Forms.Button();
             this.button_Line = new System.Windows.Forms.Button();
+            this.radioButton_Input = new System.Windows.Forms.RadioButton();
+            this.radioButton_Process = new System.Windows.Forms.RadioButton();
             ((System.ComponentModel.ISupportInitialize)(this.MainPalette)).BeginInit();
             this.SuspendLayout();
             // 
@@ -73,11 +75,37 @@
             this.button_Line.UseVisualStyleBackColor = true;
             this.button_Line.Click += new System.EventHandler(this.button_Line_Click);
             // 
+            // radioButton_Input
+            // 
+            this.radioButton_Input.AutoSize = true;
+            this.radioButton_Input.Checked = true;
+            this.radioButton_Input.Location = new System.Drawing.Point(1080, 12);
+            this.radioButton_Input.Name = "radioButton_Input";
+            this.radioButton_Input.Size = new System.Drawing.Size(50, 16);
+            this.radioButton_Input.TabIndex = 4;
+            this.radioButton_Input.TabStop = true;
+            this.radioButton_Input.Text = "Input";
+            this.radioButton_Input.UseVisualStyleBackColor = true;
+            this.radioButton_Input.CheckedChanged += new System.EventHandler(this.radioButton_Input_CheckedChanged);
+            // 
+            // radioButton_Process
+            // 
+            this.radioButton_Process.AutoSize = true;
+            this.radioButton_Process.Location = new System.Drawing.Point(1080, 34);
+            this.radioButton_Process.Name = "radioButton_Process";
+            this.radioButton_Process.Size = new System.Drawing.Size(70, 16);
+            this.radioButton_Process.TabIndex = 5;
+            this.radioButton_Process.Text = "Process";
+            this.radioButton_Process.UseVisualStyleBackColor = true;
+            this.radioButton_Process.CheckedChanged += new System.EventHandler(this.radioButton_Process_CheckedChanged);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1184, 661);
+            this.Controls.Add(this.radioButton_Process);
+            this.Controls.Add(this.radioButton_Input);
             this.Controls.Add(this.button_Line);
             this.Controls.Add(this.button_Point);
             this.Controls.Add(this.textBox_DrawMode);
@@ -97,6 +125,8 @@
         private System.Windows.Forms.Button button_Point;
         private System.Windows.Forms.Button button_Line;
         private System.Windows.Forms.TextBox textBox_DrawMode;
+        private System.Windows.Forms.RadioButton radioButton_Input;
+        private System.Windows.Forms.RadioButton radioButton_Process;
     }
 }
 
