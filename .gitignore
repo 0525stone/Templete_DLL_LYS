@@ -30,3 +30,10 @@
 *.exe
 *.out
 *.app
+
+# Packages
+packages/*
+
+# LYS
+Templete_DLL_LYS/bin/*
+Templete_DLL_LYS/obj/*
