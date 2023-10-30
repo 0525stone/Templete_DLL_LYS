@@ -50,6 +50,7 @@
             // 
             this.textBox_DrawMode.BackColor = System.Drawing.SystemColors.InactiveBorder;
             this.textBox_DrawMode.Cursor = System.Windows.Forms.Cursors.No;
+            this.textBox_DrawMode.Enabled = false;
             this.textBox_DrawMode.Location = new System.Drawing.Point(940, 16);
             this.textBox_DrawMode.Name = "textBox_DrawMode";
             this.textBox_DrawMode.Size = new System.Drawing.Size(90, 21);

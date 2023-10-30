@@ -31,7 +31,6 @@ namespace Templete_DLL_LYS
 
         #endregion
 
-
         public Form1()
         {
             InitializeComponent();
@@ -40,7 +39,8 @@ namespace Templete_DLL_LYS
             MainPalette.MouseDown += new MouseEventHandler(MainPalette_MouseDown);
             MainPalette.MouseMove += new MouseEventHandler(MainPalette_MouseMove);
             MainPalette.MouseUp += new MouseEventHandler(MainPalette_MouseUp);
-
+            this.KeyPreview = true;
+            this.KeyDown += new KeyEventHandler(MainPalette_KeyDown);
 
 
             //// Example 할 때 사용한 변수들
@@ -57,7 +57,6 @@ namespace Templete_DLL_LYS
             pen.Dispose(); // 펜 객체 해제
         }
 
-
         private void radioButton_Input_CheckedChanged(object sender, EventArgs e)
         {
             this.m_ProgramMode = 0;
@@ -73,7 +72,7 @@ namespace Templete_DLL_LYS
 
         }
 
-        // Program Mode 0 : Data 입력
+#region Program Mode 0 : Data 입력
         // 직접 Data 입력 받는 모드
         private void MainPalette_MouseDown(object sender, MouseEventArgs e)
         {
@@ -136,6 +135,8 @@ namespace Templete_DLL_LYS
                     int centerY = y - radius;
 
                     g.DrawEllipse(pen, centerX, centerY, 2 * radius, 2 * radius);
+                    g.DrawEllipse(pen, centerX + 50, centerY + 50, 2 * radius, 2 * radius);
+
                 }
                 else
                 {
@@ -144,6 +145,42 @@ namespace Templete_DLL_LYS
                 }
             }
         }
+
+        private void MainPalette_KeyDown(object sender, KeyEventArgs e)
+        {
+            string keypressed = "Key Pressed : " + points.Count.ToString();
+            Console.WriteLine(keypressed);
+            if (m_ProgramMode == 0)
+            {
+                if (e.KeyCode == Keys.D)
+                {
+                    if (points.Count > 0)
+                    {
+                        points.RemoveAt(points.Count - 1);
+                        MainPalette.Invalidate(); // Request the panel to be repainted
+                    }
+                    MainPallete_repaint();
+
+                }
+            }
+        }
+
+        private void MainPallete_repaint()
+        {
+            int radius = 1;
+
+            for (int i = 0; i < points.Count; i++)
+            {
+                Point point = points[i];
+                Point end = new Point (100,100);
+                g = MainPalette.CreateGraphics(); // Graphics 객체 생성(원)
+                g.DrawEllipse(pen, point.X, point.Y, 2 * radius, 2 * radius);
+                g.DrawLine(pen, point, end);
+
+            }
+        }
+
+        #endregion Program Mode 0 부분 끝
 
 
         private void button_Point_Click(object sender, EventArgs e)
