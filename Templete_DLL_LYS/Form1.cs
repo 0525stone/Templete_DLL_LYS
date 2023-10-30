@@ -22,6 +22,10 @@ namespace Templete_DLL_LYS
         private Point endPoint;
         private Pen drawPen = new Pen(Color.Black, 2); // 선의 색상과 두께를 설정합니다.
 
+        private List<Point> points = new List<Point>();
+        private Graphics g;
+        private Pen pen = new Pen(Color.Blue, 2);
+
         #region 구간 주석
         // working??
 
@@ -33,8 +37,9 @@ namespace Templete_DLL_LYS
             InitializeComponent();
 
             //// Palette
-            MainPalette.MouseClick += new MouseEventHandler(MainPalette_MouseClick);
             MainPalette.MouseDown += new MouseEventHandler(MainPalette_MouseDown);
+            MainPalette.MouseMove += new MouseEventHandler(MainPalette_MouseMove);
+            MainPalette.MouseUp += new MouseEventHandler(MainPalette_MouseUp);
 
 
 
@@ -44,7 +49,14 @@ namespace Templete_DLL_LYS
             //this.MouseUp += Form1_MouseUp;
         }
 
-        
+        // 전역 변수 해제 메서드
+        private void ReleaseGlobals()
+        {
+            points.Clear(); // 리스트 초기화
+            g.Dispose(); // Graphics 해제
+            pen.Dispose(); // 펜 객체 해제
+        }
+
 
         private void radioButton_Input_CheckedChanged(object sender, EventArgs e)
         {
@@ -56,57 +68,83 @@ namespace Templete_DLL_LYS
             this.m_ProgramMode = 1;
         }
 
-    // Program Mode 0 : Data 입력
-        // 직접 Data 입력 받는 모드
-        private void MainPalette_MouseClick(object sender, MouseEventArgs e)
+        private void Form1_Load(object sender, EventArgs e)
         {
-            // PictureBox에서 마우스 클릭된 위치를 가져옵니다.
-            int x = e.X;
-            int y = e.Y;
 
-            // 원을 그릴 Graphics 객체를 생성합니다.
-            Graphics g = MainPalette.CreateGraphics();
-
-            // 원을 그리는 색상과 펜을 생성합니다.
-            Pen pen = new Pen(Color.Red, 2);
-
-            // 원의 중심 좌표와 반지름을 계산합니다.
-            int radius = 1;
-            int centerX = x - radius;
-            int centerY = y - radius;
-
-            // 원을 그립니다.
-            g.DrawEllipse(pen, centerX, centerY, 2 * radius, 2 * radius);
-
-            // 리소스를 해제합니다.
-            pen.Dispose();
-            g.Dispose();
         }
 
+        // Program Mode 0 : Data 입력
+        // 직접 Data 입력 받는 모드
         private void MainPalette_MouseDown(object sender, MouseEventArgs e)
         {
-            // PictureBox에서 마우스 클릭된 위치를 가져옵니다.
-            int x = e.X;
-            int y = e.Y;
+            if (m_ProgramMode == 0)
+            {
+                points.Add(e.Location);
 
-            // 원을 그릴 Graphics 객체를 생성합니다.
-            Graphics g = MainPalette.CreateGraphics();
+                // PictureBox에서 마우스 클릭된 위치를 가져옵니다.
+                int x = e.X;
+                int y = e.Y;
+                startPoint = e.Location;
 
-            // 원을 그리는 색상과 펜을 생성합니다.
-            Pen pen = new Pen(Color.Blue, 2);
+                g = MainPalette.CreateGraphics(); // Graphics 객체 생성(원)
 
-            // 원의 중심 좌표와 반지름을 계산합니다.
-            int radius = 1;
-            int centerX = x - radius;
-            int centerY = y - radius;
+                // 그림 그릴 원 관련 파라미터
+                int radius = 1;
+                int centerX = x - radius;
+                int centerY = y - radius;
 
-            // 원을 그립니다.
-            g.DrawEllipse(pen, centerX, centerY, 2 * radius, 2 * radius);
-
-            // 리소스를 해제합니다.
-            pen.Dispose();
-            g.Dispose();
+                g.DrawEllipse(pen, centerX, centerY, 2 * radius, 2 * radius);
+            }
         }
+
+        private void MainPalette_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (m_ProgramMode == 0)
+            {
+                if (e.Button == MouseButtons.Left)
+                {
+                    // PictureBox에서 마우스 클릭된 위치를 가져옵니다.
+                    int x = e.X;
+                    int y = e.Y;
+
+                    g = MainPalette.CreateGraphics(); // Graphics 객체 생성(원)
+
+                    // 그림 그릴 원 관련 파라미터
+                    int radius = 1;
+                    int centerX = x - radius;
+                    int centerY = y - radius;
+
+                    g.DrawEllipse(pen, centerX, centerY, 2 * radius, 2 * radius);
+                }
+            }
+        }
+
+        private void MainPalette_MouseUp(object sender, MouseEventArgs e)
+        {
+            endPoint = e.Location;
+            if (m_ProgramMode == 0)
+            {
+                if (e.Button == MouseButtons.Left)
+                {
+                    // PictureBox에서 마우스 클릭된 위치를 가져옵니다.
+                    int x = e.X;
+                    int y = e.Y;
+
+                    // 그림 그릴 원 관련 파라미터
+                    int radius = 1;
+                    int centerX = x - radius;
+                    int centerY = y - radius;
+
+                    g.DrawEllipse(pen, centerX, centerY, 2 * radius, 2 * radius);
+                }
+                else
+                {
+                    g = MainPalette.CreateGraphics(); // Graphics 객체 생성(원)
+                    g.DrawLine(pen, startPoint, endPoint);
+                }
+            }
+        }
+
 
         private void button_Point_Click(object sender, EventArgs e)
         {
@@ -120,7 +158,8 @@ namespace Templete_DLL_LYS
             m_DrawMode = "Line";
         }
 
-#region ================= MouseDown, Up, Move Example ====================
+
+        #region ================= MouseDown, Up, Move Example ====================
         //private void Form1_MouseDown(object sender, MouseEventArgs e)
         //{
         //    if (e.Button == MouseButtons.Left)
@@ -156,9 +195,7 @@ namespace Templete_DLL_LYS
         //        e.Graphics.DrawLine(drawPen, startPoint, endPoint);
         //    }
         //}
-#endregion
-
-
+        #endregion
     }
 
 }
