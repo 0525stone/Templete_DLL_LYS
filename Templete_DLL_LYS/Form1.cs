@@ -18,13 +18,16 @@ namespace Templete_DLL_LYS
 
         // TODO 그림 그리는
         private bool isDrawing = false;
-        private Point startPoint;
-        private Point endPoint;
-        private Pen drawPen = new Pen(Color.Black, 2); // 선의 색상과 두께를 설정합니다.
+        private Point m_startPoint;
+        private Point m_endPoint;
 
-        private List<Point> points = new List<Point>();
+        private List<Point> m_points = new List<Point>();
+        private List<List<Point>> m_lines = new List<List<Point>>();
+        private List<int> logs_drawing = new List<int>();
         private Graphics g;
         private Pen pen = new Pen(Color.Blue, 2);
+
+        private Bitmap bitmap;
 
         #region 구간 주석
         // working??
@@ -36,8 +39,13 @@ namespace Templete_DLL_LYS
             InitializeComponent();
 
             //// Palette
+            bitmap = new Bitmap(MainPalette.Width, MainPalette.Height);
+            Graphics g = Graphics.FromImage(bitmap);
+            g.Clear(Color.White);
+            MainPalette.Image = bitmap;
+
             MainPalette.MouseDown += new MouseEventHandler(MainPalette_MouseDown);
-            MainPalette.MouseMove += new MouseEventHandler(MainPalette_MouseMove);
+            //MainPalette.MouseMove += new MouseEventHandler(MainPalette_MouseMove);
             MainPalette.MouseUp += new MouseEventHandler(MainPalette_MouseUp);
             this.KeyPreview = true;
             this.KeyDown += new KeyEventHandler(MainPalette_KeyDown);
@@ -50,12 +58,12 @@ namespace Templete_DLL_LYS
         }
 
         // 전역 변수 해제 메서드
-        private void ReleaseGlobals()
-        {
-            points.Clear(); // 리스트 초기화
-            g.Dispose(); // Graphics 해제
-            pen.Dispose(); // 펜 객체 해제
-        }
+        //private void ReleaseGlobals()
+        //{
+        //    points.Clear(); // 리스트 초기화
+        //    g.Dispose(); // Graphics 해제
+        //    pen.Dispose(); // 펜 객체 해제
+        //}
 
         private void radioButton_Input_CheckedChanged(object sender, EventArgs e)
         {
@@ -69,7 +77,7 @@ namespace Templete_DLL_LYS
 
         private void Form1_Load(object sender, EventArgs e)
         {
-
+            // TODO 어떤 역할을 수행하는지 모르겠슴..
         }
 
 #region Program Mode 0 : Data 입력
@@ -78,19 +86,17 @@ namespace Templete_DLL_LYS
         {
             if (m_ProgramMode == 0)
             {
-                points.Add(e.Location);
-
                 // PictureBox에서 마우스 클릭된 위치를 가져옵니다.
                 int x = e.X;
                 int y = e.Y;
-                startPoint = e.Location;
+                m_startPoint = e.Location;
 
                 g = MainPalette.CreateGraphics(); // Graphics 객체 생성(원)
 
                 // 그림 그릴 원 관련 파라미터
                 int radius = 1;
-                int centerX = x - radius;
-                int centerY = y - radius;
+                int centerX = x;
+                int centerY = y;
 
                 g.DrawEllipse(pen, centerX, centerY, 2 * radius, 2 * radius);
             }
@@ -120,7 +126,7 @@ namespace Templete_DLL_LYS
 
         private void MainPalette_MouseUp(object sender, MouseEventArgs e)
         {
-            endPoint = e.Location;
+            m_endPoint = e.Location;
             if (m_ProgramMode == 0)
             {
                 if (e.Button == MouseButtons.Left)
@@ -134,33 +140,50 @@ namespace Templete_DLL_LYS
                     int centerX = x - radius;
                     int centerY = y - radius;
 
-                    g.DrawEllipse(pen, centerX, centerY, 2 * radius, 2 * radius);
-                    g.DrawEllipse(pen, centerX + 50, centerY + 50, 2 * radius, 2 * radius);
-
+                    //g.DrawEllipse(pen, centerX, centerY, 2 * radius, 2 * radius);
+                    m_points.Add(m_startPoint);
+                    logs_drawing.Add(1);
                 }
                 else
                 {
                     g = MainPalette.CreateGraphics(); // Graphics 객체 생성(원)
-                    g.DrawLine(pen, startPoint, endPoint);
+                    g.DrawLine(pen, m_startPoint, m_endPoint);
+                    m_lines.Add(new List<Point> { m_startPoint, m_endPoint });
+                    logs_drawing.Add(2);
                 }
             }
         }
 
         private void MainPalette_KeyDown(object sender, KeyEventArgs e)
         {
-            string keypressed = "Key Pressed : " + points.Count.ToString();
+            string keypressed = "Key Pressed : " + m_points.Count.ToString();
             Console.WriteLine(keypressed);
             if (m_ProgramMode == 0)
             {
                 if (e.KeyCode == Keys.D)
                 {
-                    if (points.Count > 0)
+
+                    int a = logs_drawing[logs_drawing.Count - 1];
+                    if (a == 1)
                     {
-                        points.RemoveAt(points.Count - 1);
-                        MainPalette.Invalidate(); // Request the panel to be repainted
+                        if (m_points.Count > 0)
+                        {
+                            m_points.RemoveAt(m_points.Count - 1);
+                            logs_drawing.RemoveAt(logs_drawing.Count - 1);
+                            MainPalette.Invalidate(); // Request the panel to be repainted
+                        }
+                    }
+                    if (a==2)
+                    {
+                        if (m_lines.Count > 0)
+                        {
+                            m_lines.RemoveAt(m_lines.Count - 1);
+                            logs_drawing.RemoveAt(logs_drawing.Count - 1);
+                            MainPalette.Invalidate();
+                        }
+
                     }
                     MainPallete_repaint();
-
                 }
             }
         }
@@ -169,15 +192,21 @@ namespace Templete_DLL_LYS
         {
             int radius = 1;
 
-            for (int i = 0; i < points.Count; i++)
+            using (Graphics g = Graphics.FromImage(bitmap))
             {
-                Point point = points[i];
-                Point end = new Point (100,100);
-                g = MainPalette.CreateGraphics(); // Graphics 객체 생성(원)
-                g.DrawEllipse(pen, point.X, point.Y, 2 * radius, 2 * radius);
-                g.DrawLine(pen, point, end);
+                g.Clear(Color.White);
+                foreach (Point point in m_points)
+                {
+                    g.DrawEllipse(pen, point.X, point.Y, 2 * radius, 2 * radius);
+                }
+                foreach (List<Point> line in m_lines)
+                {
+                    g.DrawLine(pen, line[0], line[1]);
+                }
 
             }
+
+            MainPalette.Invalidate();
         }
 
         #endregion Program Mode 0 부분 끝
