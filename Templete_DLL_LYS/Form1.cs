@@ -25,7 +25,8 @@ namespace Templete_DLL_LYS
         private List<List<Point>> m_lines = new List<List<Point>>();
         private List<int> logs_drawing = new List<int>();
         private Graphics g;
-        private Pen pen = new Pen(Color.Blue, 2);
+        private Pen m_pen = new Pen(Color.Blue, 2);
+        private int m_radius = 1;
 
         private Bitmap bitmap;
 
@@ -94,11 +95,10 @@ namespace Templete_DLL_LYS
                 g = MainPalette.CreateGraphics(); // Graphics 객체 생성(원)
 
                 // 그림 그릴 원 관련 파라미터
-                int radius = 1;
                 int centerX = x;
                 int centerY = y;
 
-                g.DrawEllipse(pen, centerX, centerY, 2 * radius, 2 * radius);
+                //g.DrawEllipse(m_pen, centerX, centerY, 2 * m_radius, 2 * m_radius);
             }
         }
 
@@ -115,11 +115,10 @@ namespace Templete_DLL_LYS
                     g = MainPalette.CreateGraphics(); // Graphics 객체 생성(원)
 
                     // 그림 그릴 원 관련 파라미터
-                    int radius = 1;
-                    int centerX = x - radius;
-                    int centerY = y - radius;
+                    int centerX = x - m_radius;
+                    int centerY = y - m_radius;
 
-                    g.DrawEllipse(pen, centerX, centerY, 2 * radius, 2 * radius);
+                    g.DrawEllipse(m_pen, centerX, centerY, 2 * m_radius, 2 * m_radius);
                 }
             }
         }
@@ -136,18 +135,17 @@ namespace Templete_DLL_LYS
                     int y = e.Y;
 
                     // 그림 그릴 원 관련 파라미터
-                    int radius = 1;
-                    int centerX = x - radius;
-                    int centerY = y - radius;
+                    int centerX = x - m_radius;
+                    int centerY = y - m_radius;
 
-                    //g.DrawEllipse(pen, centerX, centerY, 2 * radius, 2 * radius);
-                    m_points.Add(m_startPoint);
+                    g.DrawEllipse(m_pen, centerX, centerY, 2 * m_radius, 2 * m_radius);
+                    m_points.Add(m_endPoint);
                     logs_drawing.Add(1);
                 }
                 else
                 {
                     g = MainPalette.CreateGraphics(); // Graphics 객체 생성(원)
-                    g.DrawLine(pen, m_startPoint, m_endPoint);
+                    g.DrawLine(m_pen, m_startPoint, m_endPoint);
                     m_points.Add(m_startPoint);
                     m_points.Add(m_endPoint);
                     logs_drawing.Add(2);
@@ -189,8 +187,6 @@ namespace Templete_DLL_LYS
 
         private void MainPallete_repaint()
         {
-            int radius = 1;
-
             using (Graphics g = Graphics.FromImage(bitmap))
             {
                 g.Clear(Color.White);
@@ -199,12 +195,12 @@ namespace Templete_DLL_LYS
                 {
                     if (index_logs == 1)
                     {
-                        g.DrawEllipse(pen, m_points[index_point].X, m_points[index_point].Y, 2 * radius, 2 * radius);
+                        g.DrawEllipse(m_pen, m_points[index_point].X, m_points[index_point].Y, 2 * m_radius, 2 * m_radius);
                         index_point += index_logs;
                     }
                     else if (index_logs == 2)
                     {
-                        g.DrawLine(pen, m_points[index_point], m_points[index_point+1]);
+                        g.DrawLine(m_pen, m_points[index_point], m_points[index_point+1]);
                         index_point += index_logs;
                     }
                 }
