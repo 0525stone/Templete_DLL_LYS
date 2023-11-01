@@ -16,16 +16,16 @@ namespace Templete_DLL_LYS
 
         string m_DrawMode = "Line";
 
-        // TODO 그림 그리는
-        private bool isDrawing = false;
+        // ProgramMode 0 일 때, 사용하는 것들
         private Point m_startPoint;
         private Point m_endPoint;
 
         private List<Point> m_points = new List<Point>();
-        private List<List<Point>> m_lines = new List<List<Point>>();
         private List<int> logs_drawing = new List<int>();
         private Graphics g;
-        private Pen m_pen = new Pen(Color.Blue, 2);
+        private Pen m_pen_blue = new Pen(Color.Blue, 2);
+        private Pen m_pen_red = new Pen(Color.Red, 2);
+        private Pen m_pen_black = new Pen(Color.Black, 2);
         private int m_radius = 1;
 
         private Bitmap bitmap;
@@ -118,7 +118,7 @@ namespace Templete_DLL_LYS
                     int centerX = x - m_radius;
                     int centerY = y - m_radius;
 
-                    g.DrawEllipse(m_pen, centerX, centerY, 2 * m_radius, 2 * m_radius);
+                    g.DrawEllipse(m_pen_blue, centerX, centerY, 2 * m_radius, 2 * m_radius);
                 }
             }
         }
@@ -138,14 +138,14 @@ namespace Templete_DLL_LYS
                     int centerX = x - m_radius;
                     int centerY = y - m_radius;
 
-                    g.DrawEllipse(m_pen, centerX, centerY, 2 * m_radius, 2 * m_radius);
+                    g.DrawEllipse(m_pen_blue, centerX, centerY, 2 * m_radius, 2 * m_radius);
                     m_points.Add(m_endPoint);
                     logs_drawing.Add(1);
                 }
                 else
                 {
                     g = MainPalette.CreateGraphics(); // Graphics 객체 생성(원)
-                    g.DrawLine(m_pen, m_startPoint, m_endPoint);
+                    g.DrawLine(m_pen_blue, m_startPoint, m_endPoint);
                     m_points.Add(m_startPoint);
                     m_points.Add(m_endPoint);
                     logs_drawing.Add(2);
@@ -195,12 +195,12 @@ namespace Templete_DLL_LYS
                 {
                     if (index_logs == 1)
                     {
-                        g.DrawEllipse(m_pen, m_points[index_point].X, m_points[index_point].Y, 2 * m_radius, 2 * m_radius);
+                        g.DrawEllipse(m_pen_blue, m_points[index_point].X, m_points[index_point].Y, 2 * m_radius, 2 * m_radius);
                         index_point += index_logs;
                     }
                     else if (index_logs == 2)
                     {
-                        g.DrawLine(m_pen, m_points[index_point], m_points[index_point+1]);
+                        g.DrawLine(m_pen_blue, m_points[index_point], m_points[index_point+1]);
                         index_point += index_logs;
                     }
                 }

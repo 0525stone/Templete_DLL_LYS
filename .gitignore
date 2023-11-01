@@ -37,7 +37,12 @@ packages/*
 # vs
 .vs/*
 
+# dll files
+x64/*
+Templete_DLL/x64/*
+
 # LYS
 Templete_DLL_LYS/bin/*
 Templete_DLL_LYS/obj/*
 *.viw~
+*.tlog
