@@ -1,5 +1,10 @@
 #include "Templete_DLL_LYS.h"
 
+// 추가할 예시 함수
+// 1. NURBS
+// 2. PCA?!
+
+
 Templete_DLL_LYS::Templete_DLL_LYS()
 {
 

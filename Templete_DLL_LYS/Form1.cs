@@ -12,6 +12,7 @@ namespace Templete_DLL_LYS
 {
     public partial class Form1 : Form
     {
+        Templete_DLL __Templete_DLL = null;
         int m_ProgramMode = 0; // 0 : Input, 1 : Process
 
         string m_DrawMode = "Line";
@@ -215,6 +216,7 @@ namespace Templete_DLL_LYS
 
         private void button_Point_Click(object sender, EventArgs e)
         {
+            //this.__Templete_DLL = new Templete_DLL_LYS();
             this.textBox_DrawMode.Text = "Point";
             m_DrawMode = "Point";
         }
