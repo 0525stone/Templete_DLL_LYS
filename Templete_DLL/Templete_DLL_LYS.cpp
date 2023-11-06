@@ -33,6 +33,12 @@ Templete_DLL_LYS* Templete_DLL_LYS_Create()
 	return new Templete_DLL_LYS();
 }
 
+void Templete_DLL_LYS_Delete(Templete_DLL_LYS* obj)
+{
+	delete obj;
+	obj = nullptr;
+}
+
 char* Templete_DLL_LYS_sayhello(Templete_DLL_LYS* obj)
 {
 	return obj->say_hello();

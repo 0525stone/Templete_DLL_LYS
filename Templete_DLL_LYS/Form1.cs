@@ -39,6 +39,7 @@ namespace Templete_DLL_LYS
         public Form1()
         {
             InitializeComponent();
+            InitMembers();
 
             //// Palette
             bitmap = new Bitmap(MainPalette.Width, MainPalette.Height);
@@ -66,6 +67,12 @@ namespace Templete_DLL_LYS
         //    g.Dispose(); // Graphics 해제
         //    pen.Dispose(); // 펜 객체 해제
         //}
+
+        public void InitMembers()
+        {
+            // Legend of button guide
+            this.richTextBox_legend.Text = "D : Undo recent Action";
+        }
 
         private void radioButton_Input_CheckedChanged(object sender, EventArgs e)
         {
@@ -265,6 +272,7 @@ namespace Templete_DLL_LYS
         //    }
         //}
         #endregion
+
     }
 
 }

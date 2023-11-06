@@ -34,6 +34,7 @@
             this.button_Line = new System.Windows.Forms.Button();
             this.radioButton_Input = new System.Windows.Forms.RadioButton();
             this.radioButton_Process = new System.Windows.Forms.RadioButton();
+            this.richTextBox_legend = new System.Windows.Forms.RichTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.MainPalette)).BeginInit();
             this.SuspendLayout();
             // 
@@ -100,11 +101,20 @@
             this.radioButton_Process.UseVisualStyleBackColor = true;
             this.radioButton_Process.CheckedChanged += new System.EventHandler(this.radioButton_Process_CheckedChanged);
             // 
+            // richTextBox_legend
+            // 
+            this.richTextBox_legend.Location = new System.Drawing.Point(940, 390);
+            this.richTextBox_legend.Name = "richTextBox_legend";
+            this.richTextBox_legend.Size = new System.Drawing.Size(190, 96);
+            this.richTextBox_legend.TabIndex = 7;
+            this.richTextBox_legend.Text = "";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1184, 661);
+            this.Controls.Add(this.richTextBox_legend);
             this.Controls.Add(this.radioButton_Process);
             this.Controls.Add(this.radioButton_Input);
             this.Controls.Add(this.button_Line);
@@ -128,6 +138,7 @@
         private System.Windows.Forms.TextBox textBox_DrawMode;
         private System.Windows.Forms.RadioButton radioButton_Input;
         private System.Windows.Forms.RadioButton radioButton_Process;
+        private System.Windows.Forms.RichTextBox richTextBox_legend;
     }
 }
 
