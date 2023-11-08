@@ -13,6 +13,9 @@ namespace Templete_DLL_LYS
     public partial class Form1 : Form
     {
         Templete_DLL __Templete_DLL = null;
+
+        Thread_DataProcess __thread_DataProcess = null;
+
         int m_ProgramMode = 0; // 0 : Input, 1 : Process
 
         string m_DrawMode = "Line";
@@ -72,6 +75,10 @@ namespace Templete_DLL_LYS
         {
             // Legend of button guide
             this.richTextBox_legend.Text = "D : Undo recent Action";
+
+            this.__thread_DataProcess = new Thread_DataProcess();
+
+
         }
 
         private void radioButton_Input_CheckedChanged(object sender, EventArgs e)
@@ -226,6 +233,16 @@ namespace Templete_DLL_LYS
             //this.__Templete_DLL = new Templete_DLL_LYS();
             this.textBox_DrawMode.Text = "Point";
             m_DrawMode = "Point";
+
+            if (this.__thread_DataProcess.IsRunning())
+            {
+                MessageBox.Show("Stop Graphic Thread", "Caution!!", MessageBoxButtons.OK);
+                return;
+            }
+
+            this.__thread_DataProcess.StartGraphics();
+
+
         }
 
         private void button_Line_Click(object sender, EventArgs e)
