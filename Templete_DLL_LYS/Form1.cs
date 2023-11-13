@@ -12,7 +12,7 @@ namespace Templete_DLL_LYS
 {
     public partial class Form1 : Form
     {
-        Templete_DLL __Templete_DLL = null;
+        //Templete_DLL __Templete_DLL = null;
 
         Thread_DataProcess __thread_DataProcess = null;
 
@@ -47,6 +47,8 @@ namespace Templete_DLL_LYS
             //// Palette
             bitmap = new Bitmap(MainPalette.Width, MainPalette.Height);
             Graphics g = Graphics.FromImage(bitmap);
+
+
             g.Clear(Color.White);
             MainPalette.Image = bitmap;
 
