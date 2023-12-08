@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OpenCvSharp;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -21,11 +22,13 @@ namespace Templete_DLL_LYS
         string m_DrawMode = "Line";
 
         // ProgramMode 0 일 때, 사용하는 것들
-        private Point m_startPoint;
-        private Point m_endPoint;
+        // 입력 받은 데이터들
+        private Point2d m_startPoint;
+        private Point2d m_endPoint;
 
-        private List<Point> m_points = new List<Point>();
-        private List<int> logs_drawing = new List<int>();
+        private List<Point2d> m_points = new List<Point2d>();
+        private List<int> m_logs_drawing = new List<int>();
+
         private Graphics g;
         private Pen m_pen_blue = new Pen(Color.Blue, 2);
         private Pen m_pen_red = new Pen(Color.Red, 2);
@@ -107,7 +110,7 @@ namespace Templete_DLL_LYS
                 // PictureBox에서 마우스 클릭된 위치를 가져옵니다.
                 int x = e.X;
                 int y = e.Y;
-                m_startPoint = e.Location;
+                m_startPoint = new Point2d(e.Location.X, e.Location.Y);
 
                 g = MainPalette.CreateGraphics(); // Graphics 객체 생성(원)
 
@@ -142,7 +145,7 @@ namespace Templete_DLL_LYS
 
         private void MainPalette_MouseUp(object sender, MouseEventArgs e)
         {
-            m_endPoint = e.Location;
+            m_endPoint = new Point2d(e.Location.X, e.Location.Y);
             if (m_ProgramMode == 0)
             {
                 if (e.Button == MouseButtons.Left)
@@ -157,15 +160,15 @@ namespace Templete_DLL_LYS
 
                     g.DrawEllipse(m_pen_blue, centerX, centerY, 2 * m_radius, 2 * m_radius);
                     m_points.Add(m_endPoint);
-                    logs_drawing.Add(1);
+                    m_logs_drawing.Add(1);
                 }
                 else
                 {
                     g = MainPalette.CreateGraphics(); // Graphics 객체 생성(원)
-                    g.DrawLine(m_pen_blue, m_startPoint, m_endPoint);
+                    g.DrawLine(m_pen_blue, (float)m_startPoint.X, (float)m_startPoint.Y, (float)m_endPoint.X, (float)m_endPoint.Y);
                     m_points.Add(m_startPoint);
                     m_points.Add(m_endPoint);
-                    logs_drawing.Add(2);
+                    m_logs_drawing.Add(2);
                 }
             }
         }
@@ -174,16 +177,16 @@ namespace Templete_DLL_LYS
         {
             if (m_ProgramMode == 0)
             {
-                if ((e.KeyCode == Keys.D) && (logs_drawing.Count > 0))
+                if ((e.KeyCode == Keys.D) && (m_logs_drawing.Count > 0))
                 {
-                    int log_current = logs_drawing[logs_drawing.Count - 1];
+                    int log_current = m_logs_drawing[m_logs_drawing.Count - 1];
 
                     if (log_current == 1)
                     {
                         if (m_points.Count > 0)
                         {
                             m_points.RemoveAt(m_points.Count - 1);
-                            logs_drawing.RemoveAt(logs_drawing.Count - 1);
+                            m_logs_drawing.RemoveAt(m_logs_drawing.Count - 1);
                         }
                     }
                     if (log_current == 2)
@@ -192,7 +195,7 @@ namespace Templete_DLL_LYS
                         {
                             m_points.RemoveAt(m_points.Count - 1);
                             m_points.RemoveAt(m_points.Count - 1);
-                            logs_drawing.RemoveAt(logs_drawing.Count - 1);
+                            m_logs_drawing.RemoveAt(m_logs_drawing.Count - 1);
                         }
 
                     }
@@ -206,18 +209,18 @@ namespace Templete_DLL_LYS
         {
             using (Graphics g = Graphics.FromImage(bitmap))
             {
-                g.Clear(Color.White);
+                g.Clear(Color.White); // TODO : 흰색 도화지 말고 다른 이미지 Load 도 할 수 있게끔
                 int index_point = 0;
-                foreach (int index_logs in logs_drawing)
+                foreach (int index_logs in m_logs_drawing)
                 {
                     if (index_logs == 1)
                     {
-                        g.DrawEllipse(m_pen_blue, m_points[index_point].X, m_points[index_point].Y, 2 * m_radius, 2 * m_radius);
+                        g.DrawEllipse(m_pen_blue, (float)m_points[index_point].X, (float)m_points[index_point].Y, 2 * m_radius, 2 * m_radius);
                         index_point += index_logs;
                     }
                     else if (index_logs == 2)
                     {
-                        g.DrawLine(m_pen_blue, m_points[index_point], m_points[index_point+1]);
+                        g.DrawLine(m_pen_blue, (float)m_points[index_point].X, (float)m_points[index_point].Y, (float)m_points[index_point + 1].X, (float)m_points[index_point + 1].Y);
                         index_point += index_logs;
                     }
                 }
@@ -230,10 +233,10 @@ namespace Templete_DLL_LYS
         #endregion Program Mode 0 부분 끝
 
 
-        private void button_Point_Click(object sender, EventArgs e)
+        private void button_Fitting_Click(object sender, EventArgs e)
         {
             //this.__Templete_DLL = new Templete_DLL_LYS();
-            this.textBox_DrawMode.Text = "Point";
+            this.textBox_DrawMode.Text = "Fitting";
             m_DrawMode = "Point";
 
             if (this.__thread_DataProcess.IsRunning())
@@ -241,16 +244,25 @@ namespace Templete_DLL_LYS
                 MessageBox.Show("Stop Graphic Thread", "Caution!!", MessageBoxButtons.OK);
                 return;
             }
-
+            //double x0, y0, x1, y1;
+            this.__thread_DataProcess.SetData(m_points, m_logs_drawing);
             this.__thread_DataProcess.StartGraphics();
+            this.__thread_DataProcess.FittingLine(out double x0, out double y0, out double x1, out double y1);
 
+            g = MainPalette.CreateGraphics(); // Graphics 객체 생성(원)
+            g.DrawLine(m_pen_red, (float)x0, (float)y0, (float)x1, (float)y1);
 
         }
 
-        private void button_Line_Click(object sender, EventArgs e)
+        private void button_Clear_Click(object sender, EventArgs e)
         {
-            this.textBox_DrawMode.Text = "Line";
-            m_DrawMode = "Line";
+            this.textBox_DrawMode.Text = "Clear, Reset";
+            m_points.Clear();
+            m_logs_drawing.Clear();
+
+            MainPallete_repaint();
+            
+
         }
 
 

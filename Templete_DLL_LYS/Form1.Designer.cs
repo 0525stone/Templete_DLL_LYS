@@ -63,19 +63,19 @@
             this.button_Point.Name = "button_Point";
             this.button_Point.Size = new System.Drawing.Size(70, 31);
             this.button_Point.TabIndex = 2;
-            this.button_Point.Text = "Point";
+            this.button_Point.Text = "Fitting";
             this.button_Point.UseVisualStyleBackColor = true;
-            this.button_Point.Click += new System.EventHandler(this.button_Point_Click);
+            this.button_Point.Click += new System.EventHandler(this.button_Fitting_Click);
             // 
             // button_Line
             // 
-            this.button_Line.Location = new System.Drawing.Point(940, 71);
+            this.button_Line.Location = new System.Drawing.Point(1080, 56);
             this.button_Line.Name = "button_Line";
             this.button_Line.Size = new System.Drawing.Size(70, 31);
             this.button_Line.TabIndex = 3;
-            this.button_Line.Text = "Line";
+            this.button_Line.Text = "Clear";
             this.button_Line.UseVisualStyleBackColor = true;
-            this.button_Line.Click += new System.EventHandler(this.button_Line_Click);
+            this.button_Line.Click += new System.EventHandler(this.button_Clear_Click);
             // 
             // radioButton_Input
             // 
