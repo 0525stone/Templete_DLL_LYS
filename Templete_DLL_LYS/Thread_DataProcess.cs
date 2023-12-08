@@ -61,7 +61,7 @@ class Thread_DataProcess
         }
     }
     
-    public void SetData(List<Point2d> m_points, List<int> m_logs_drawing)
+    public void SetData(List<Point2d> m_points, List<int> m_logs_drawing, Mat data_image)
     {
         this.m_points = m_points;
         this.m_logs_drawing = m_logs_drawing;

@@ -30,11 +30,12 @@
         {
             this.MainPalette = new System.Windows.Forms.PictureBox();
             this.textBox_DrawMode = new System.Windows.Forms.TextBox();
-            this.button_Point = new System.Windows.Forms.Button();
-            this.button_Line = new System.Windows.Forms.Button();
+            this.button_Fitting = new System.Windows.Forms.Button();
+            this.button_Clear = new System.Windows.Forms.Button();
             this.radioButton_Input = new System.Windows.Forms.RadioButton();
             this.radioButton_Process = new System.Windows.Forms.RadioButton();
             this.richTextBox_legend = new System.Windows.Forms.RichTextBox();
+            this.button_Load = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.MainPalette)).BeginInit();
             this.SuspendLayout();
             // 
@@ -57,25 +58,25 @@
             this.textBox_DrawMode.Size = new System.Drawing.Size(90, 21);
             this.textBox_DrawMode.TabIndex = 1;
             // 
-            // button_Point
+            // button_Fitting
             // 
-            this.button_Point.Location = new System.Drawing.Point(940, 43);
-            this.button_Point.Name = "button_Point";
-            this.button_Point.Size = new System.Drawing.Size(70, 31);
-            this.button_Point.TabIndex = 2;
-            this.button_Point.Text = "Fitting";
-            this.button_Point.UseVisualStyleBackColor = true;
-            this.button_Point.Click += new System.EventHandler(this.button_Fitting_Click);
+            this.button_Fitting.Location = new System.Drawing.Point(940, 43);
+            this.button_Fitting.Name = "button_Fitting";
+            this.button_Fitting.Size = new System.Drawing.Size(70, 31);
+            this.button_Fitting.TabIndex = 2;
+            this.button_Fitting.Text = "Fitting";
+            this.button_Fitting.UseVisualStyleBackColor = true;
+            this.button_Fitting.Click += new System.EventHandler(this.button_Fitting_Click);
             // 
-            // button_Line
+            // button_Clear
             // 
-            this.button_Line.Location = new System.Drawing.Point(1080, 56);
-            this.button_Line.Name = "button_Line";
-            this.button_Line.Size = new System.Drawing.Size(70, 31);
-            this.button_Line.TabIndex = 3;
-            this.button_Line.Text = "Clear";
-            this.button_Line.UseVisualStyleBackColor = true;
-            this.button_Line.Click += new System.EventHandler(this.button_Clear_Click);
+            this.button_Clear.Location = new System.Drawing.Point(1080, 56);
+            this.button_Clear.Name = "button_Clear";
+            this.button_Clear.Size = new System.Drawing.Size(70, 31);
+            this.button_Clear.TabIndex = 3;
+            this.button_Clear.Text = "Clear";
+            this.button_Clear.UseVisualStyleBackColor = true;
+            this.button_Clear.Click += new System.EventHandler(this.button_Clear_Click);
             // 
             // radioButton_Input
             // 
@@ -109,16 +110,27 @@
             this.richTextBox_legend.TabIndex = 7;
             this.richTextBox_legend.Text = "";
             // 
+            // button_Load
+            // 
+            this.button_Load.Location = new System.Drawing.Point(1080, 93);
+            this.button_Load.Name = "button_Load";
+            this.button_Load.Size = new System.Drawing.Size(70, 31);
+            this.button_Load.TabIndex = 8;
+            this.button_Load.Text = "Open";
+            this.button_Load.UseVisualStyleBackColor = true;
+            this.button_Load.Click += new System.EventHandler(this.button_Open_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1184, 661);
+            this.Controls.Add(this.button_Load);
             this.Controls.Add(this.richTextBox_legend);
             this.Controls.Add(this.radioButton_Process);
             this.Controls.Add(this.radioButton_Input);
-            this.Controls.Add(this.button_Line);
-            this.Controls.Add(this.button_Point);
+            this.Controls.Add(this.button_Clear);
+            this.Controls.Add(this.button_Fitting);
             this.Controls.Add(this.textBox_DrawMode);
             this.Controls.Add(this.MainPalette);
             this.Name = "Form1";
@@ -133,12 +145,13 @@
         #endregion
 
         private System.Windows.Forms.PictureBox MainPalette;
-        private System.Windows.Forms.Button button_Point;
-        private System.Windows.Forms.Button button_Line;
+        private System.Windows.Forms.Button button_Fitting;
+        private System.Windows.Forms.Button button_Clear;
         private System.Windows.Forms.TextBox textBox_DrawMode;
         private System.Windows.Forms.RadioButton radioButton_Input;
         private System.Windows.Forms.RadioButton radioButton_Process;
         private System.Windows.Forms.RichTextBox richTextBox_legend;
+        private System.Windows.Forms.Button button_Load;
     }
 }
 

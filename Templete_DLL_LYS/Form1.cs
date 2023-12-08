@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,6 +19,8 @@ namespace Templete_DLL_LYS
         Thread_DataProcess __thread_DataProcess = null;
 
         int m_ProgramMode = 0; // 0 : Input, 1 : Process
+
+        Mat m_mat_image;
 
         string m_DrawMode = "Line";
 
@@ -237,15 +240,16 @@ namespace Templete_DLL_LYS
         {
             //this.__Templete_DLL = new Templete_DLL_LYS();
             this.textBox_DrawMode.Text = "Fitting";
-            m_DrawMode = "Point";
+            m_DrawMode = "Fitting";
 
             if (this.__thread_DataProcess.IsRunning())
             {
                 MessageBox.Show("Stop Graphic Thread", "Caution!!", MessageBoxButtons.OK);
                 return;
             }
+
             //double x0, y0, x1, y1;
-            this.__thread_DataProcess.SetData(m_points, m_logs_drawing);
+            this.__thread_DataProcess.SetData(m_points, m_logs_drawing, m_mat_image);
             this.__thread_DataProcess.StartGraphics();
             this.__thread_DataProcess.FittingLine(out double x0, out double y0, out double x1, out double y1);
 
@@ -261,10 +265,125 @@ namespace Templete_DLL_LYS
             m_logs_drawing.Clear();
 
             MainPallete_repaint();
-            
-
         }
 
+        private void button_Open_Click(object sender, EventArgs e)
+        {
+            radiobuttonChanged(1);
+
+            string filePath_image = ReadDataPath("Image");
+            Console.WriteLine("filename : ", filePath_image);
+
+            if (filePath_image.Length == 0)
+                return;
+
+            if (filePath_image == "")
+            {
+                this.m_mat_image = null;
+            }
+            else
+            {
+                string[] split_data = filePath_image.Split('.');
+
+                if (split_data[1] == "csv")
+                    this.m_mat_image = csvToMat(filePath_image);
+                else
+                    this.m_mat_image = imageToMat(filePath_image);
+            }
+
+            // 프로그램 PictureBox에 이미지 로드
+            Bitmap bitmap = new Bitmap(filePath_image);
+            MainPalette.Image = bitmap;
+        }
+
+        private string ReadDataPath(string title)
+        {
+            //파일오픈창 생성 및 설정
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.Title = title;
+            ofd.FileName = "test";
+            ofd.Filter = "Data (*.png, *.tif, *.tiff, *.csv) | *.png; *.tif; *.tiff; *.csv; | All Data (*.*) | *.*";
+
+            //파일 오픈창 로드
+            DialogResult dr = ofd.ShowDialog();
+
+            //OK버튼 클릭시
+            if (dr == DialogResult.OK)
+            {
+                string fileFullName = ofd.FileName;
+
+                return fileFullName;
+            }
+            else
+            {
+                return "";
+            }
+        }
+
+        private Mat csvToMat(string csvFilePath)
+        {
+            using (var reader = new StreamReader(csvFilePath))
+            {
+                string line;
+                int rowCount = 0;
+                int columnCount = 0;
+
+                // 행 수와 열 수 계산
+                while ((line = reader.ReadLine()) != null)
+                {
+                    string[] values = line.Split(',');
+                    columnCount = values.Length;
+                    rowCount++;
+                }
+
+                // 이미지 데이터 배열 초기화
+                double[,] imageData = new double[rowCount, columnCount];
+
+                // CSV 파일 다시 읽어서 이미지 데이터 저장
+                using (var fileReader = new StreamReader(csvFilePath))
+                {
+                    int row = 0;
+                    while ((line = fileReader.ReadLine()) != null)
+                    {
+                        string[] values = line.Split(',');
+                        for (int col = 0; col < columnCount; col++)
+                        {
+                            double value = double.Parse(values[col]);
+                            imageData[row, col] = value;
+                        }
+                        row++;
+                    }
+                }
+
+                // 이미지 데이터로부터 Mat 객체 생성
+                int width = imageData.GetLength(1); // 이미지의 가로 크기
+                int height = imageData.GetLength(0); // 이미지의 세로 크기
+
+                return new Mat(height, width, MatType.CV_64FC1, imageData);
+            }
+        }
+
+        private Mat imageToMat(string imageFilePath)
+        {
+            Mat srcImage = Cv2.ImRead(imageFilePath, ImreadModes.Unchanged);
+
+            return srcImage;
+        }
+        private void radiobuttonChanged(int mode)
+        {
+            if (mode == 0)
+            {
+                radioButton_Input.Checked = true;
+                radioButton_Process.Checked = false;
+                m_ProgramMode = mode;
+            }
+            else if (mode == 1)
+            {
+                radioButton_Input.Checked = false;
+                radioButton_Process.Checked = true;
+                m_ProgramMode = mode;
+            }
+        }
 
         #region ================= MouseDown, Up, Move Example ====================
         //private void Form1_MouseDown(object sender, MouseEventArgs e)
@@ -303,7 +422,5 @@ namespace Templete_DLL_LYS
         //    }
         //}
         #endregion
-
     }
-
 }
