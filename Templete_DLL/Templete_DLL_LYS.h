@@ -16,6 +16,7 @@ public:
 	~Templete_DLL_LYS();
 
 	char* say_hello();
+	char* function();
 
 };
 

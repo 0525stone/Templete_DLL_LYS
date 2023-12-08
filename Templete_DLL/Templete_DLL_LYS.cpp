@@ -27,6 +27,11 @@ char* Templete_DLL_LYS::say_hello()
 	return result;
 }
 
+char* Templete_DLL_LYS::function()
+{
+
+}
+
 
 Templete_DLL_LYS* Templete_DLL_LYS_Create()
 {
@@ -42,4 +47,9 @@ void Templete_DLL_LYS_Delete(Templete_DLL_LYS* obj)
 char* Templete_DLL_LYS_sayhello(Templete_DLL_LYS* obj)
 {
 	return obj->say_hello();
+}
+
+char* Templete_DLL_LYS_function(Templete_DLL_LYS* obj, double* data_image)
+{
+	return obj->function();
 }

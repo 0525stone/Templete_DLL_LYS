@@ -18,7 +18,10 @@ class Templete_DLL
     extern public static IntPtr Templete_DLL_LYS_Delete(IntPtr obj);
 
     [DllImport(DllPath, CallingConvention = CallingConvention.Cdecl)]
-    extern public static IntPtr Templete_DLL_LYS_sayhello();
+    extern public static IntPtr Templete_DLL_LYS_sayhello(); 
+
+    [DllImport(DllPath, CallingConvention = CallingConvention.Cdecl)]
+    extern public static IntPtr Templete_DLL_LYS_function(IntPtr obj, double[] data_image);
 
     private IntPtr __templete_DLL_LYS = IntPtr.Zero;
 
@@ -37,6 +40,16 @@ class Templete_DLL
         Templete_DLL_LYS_Delete(this.__templete_DLL_LYS);
         this.__templete_DLL_LYS = IntPtr.Zero;
     }
+
+    public void function()
+    {
+        // TODO
+        string results = Marshal.PtrToStringAnsi(Templete_DLL_LYS_function(this.__inspection3D, data3D));
+
+
+    }
+
+
 
 }
 
