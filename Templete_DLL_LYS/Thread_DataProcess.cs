@@ -13,6 +13,7 @@ using System.Windows.Forms;
 
 class Thread_DataProcess
 {
+    // TODO : 구조체 구현... 아직 어떤 변수들이 필요할지에 대해 정의가 안됨
     public struct Info_points
     {
         public List<int> points_p;
@@ -116,8 +117,7 @@ class Thread_DataProcess
     {
         // TODO : 조건식 추가 필요 Form1.cs 에서 이부분을 콜하면 스레드 시작하여 프로그램 돌아가는 것임
         //if () // Point 들이 3개 이상 있으면 돌아가게끔
-        
-        this.__isRunning_thread = true;
+        //this.__isRunning_thread = true;
 
     }
 
@@ -177,9 +177,6 @@ class Thread_DataProcess
             GC.Collect();
 
         }
-
-        
     }
-
 }
 
