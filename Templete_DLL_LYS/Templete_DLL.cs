@@ -18,10 +18,16 @@ class Templete_DLL
     extern public static IntPtr Templete_DLL_LYS_Delete(IntPtr obj);
 
     [DllImport(DllPath, CallingConvention = CallingConvention.Cdecl)]
-    extern public static IntPtr Templete_DLL_LYS_sayhello(); 
+    extern public static IntPtr Templete_DLL_LYS_sayhello();
 
     [DllImport(DllPath, CallingConvention = CallingConvention.Cdecl)]
     extern public static IntPtr Templete_DLL_LYS_function(IntPtr obj, double[] data_image);
+
+    [DllImport(DllPath, CallingConvention = CallingConvention.Cdecl)]
+    extern public static IntPtr Templete_DLL_LYS_function1(IntPtr obj, double[] data_image);
+
+    [DllImport(DllPath, CallingConvention = CallingConvention.Cdecl)]
+    extern public static IntPtr Templete_DLL_LYS_function2(IntPtr obj, double[] data_image);
 
     private IntPtr __templete_DLL_LYS = IntPtr.Zero;
 
@@ -41,10 +47,29 @@ class Templete_DLL
         this.__templete_DLL_LYS = IntPtr.Zero;
     }
 
-    public void function(double[] data3d)
+    public void function(double[] data3d, List<Point2d> m_points, List<int> m_logs_drawing)
     {
+
         // TODO
         string results = Marshal.PtrToStringAnsi(Templete_DLL_LYS_function(this.__templete_DLL_LYS, data3d));
+
+
+    }
+
+    public void function1(double[] data3d, List<Point2d> m_points, List<int> m_logs_drawing)
+    {
+
+        // TODO
+        string results = Marshal.PtrToStringAnsi(Templete_DLL_LYS_function1(this.__templete_DLL_LYS, data3d));
+
+
+    }
+
+    public void function2(double[] data3d, List<Point2d> m_points, List<int> m_logs_drawing)
+    {
+
+        // TODO
+        string results = Marshal.PtrToStringAnsi(Templete_DLL_LYS_function2(this.__templete_DLL_LYS, data3d));
 
 
     }

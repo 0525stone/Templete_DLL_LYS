@@ -167,12 +167,15 @@ class Thread_DataProcess
 
             Console.WriteLine("In the Run, In the Thread");
 
-            // TODO : Run 할 때 할 작업들 여기에 배치
+            // TODO : Run 할 때 할 작업들 여기에 배치\
+
             this.__Templete_DLL = new Templete_DLL();
             double[] data = new double[100];
-            this.__Templete_DLL.function(data);
-            //if ()
+            this.__Templete_DLL.function(data, m_points, m_logs_drawing);
+            this.__Templete_DLL.function1(data, m_points, m_logs_drawing);
+            this.__Templete_DLL.function2(data, m_points, m_logs_drawing);
 
+            //if ()
 
             this.__isRunning_thread = false;
             GC.Collect();

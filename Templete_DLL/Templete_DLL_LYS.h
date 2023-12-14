@@ -17,13 +17,19 @@ public:
 
 	char* say_hello();
 	char* function();
+	char* function1();
+	char* function2();
 
 };
 
 extern "C"
 {
 	TEMPLETE_DLL_LYS_DECLSPEC Templete_DLL_LYS* Templete_DLL_LYS_Create();
+
 	TEMPLETE_DLL_LYS_DECLSPEC char* Templete_DLL_LYS_sayhello();
+
 	TEMPLETE_DLL_LYS_DECLSPEC char* Templete_DLL_LYS_function(Templete_DLL_LYS* obj, double* data_image);
+	TEMPLETE_DLL_LYS_DECLSPEC char* Templete_DLL_LYS_function1(Templete_DLL_LYS* obj, double* data_image);
+	TEMPLETE_DLL_LYS_DECLSPEC char* Templete_DLL_LYS_function2(Templete_DLL_LYS* obj, double* data_image);
 
 }

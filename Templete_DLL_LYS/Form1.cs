@@ -212,7 +212,7 @@ namespace Templete_DLL_LYS
             {
                 using (Graphics g = Graphics.FromImage(bitmap))
                 {
-                    g.Clear(Color.White); // TODO : 흰색 도화지 말고 다른 이미지 Load 도 할 수 있게끔
+                    g.Clear(Color.White);
                     int index_point = 0;
                     foreach (int index_logs in m_logs_drawing)
                     {
@@ -235,7 +235,6 @@ namespace Templete_DLL_LYS
                 using (Graphics g = Graphics.FromImage(bitmap))
                 {
                     g.Clear(Color.White); 
-                    //g.Clear(Color.White); // TODO : 흰색 도화지 말고 다른 이미지 Load 도 할 수 있게끔+
                     Image image = ReadImage(this.m_filepath);
                     g.DrawImage(image, new System.Drawing.Point(0, 0));
 

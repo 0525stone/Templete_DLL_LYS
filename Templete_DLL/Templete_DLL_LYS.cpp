@@ -34,6 +34,20 @@ char* Templete_DLL_LYS::function()
 	return result;
 }
 
+char* Templete_DLL_LYS::function1()
+{
+	std::cout << "in the c++ code through thread" << std::endl;
+	char* result = NULL;
+	return result;
+}
+
+char* Templete_DLL_LYS::function2()
+{
+	std::cout << "in the c++ code through thread" << std::endl;
+	char* result = NULL;
+	return result;
+}
+
 
 Templete_DLL_LYS* Templete_DLL_LYS_Create()
 {
@@ -54,6 +68,16 @@ char* Templete_DLL_LYS_sayhello(Templete_DLL_LYS* obj)
 char* Templete_DLL_LYS_function(Templete_DLL_LYS* obj, double* data_image)
 {
 	return obj->function();
+}
+
+char* Templete_DLL_LYS_function1(Templete_DLL_LYS* obj, double* data_image)
+{
+	return obj->function1();
+}
+
+char* Templete_DLL_LYS_function2(Templete_DLL_LYS* obj, double* data_image)
+{
+	return obj->function2();
 }
 
 //// Archive
