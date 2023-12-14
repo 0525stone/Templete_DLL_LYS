@@ -21,8 +21,8 @@ namespace Templete_DLL_LYS
         int m_ProgramMode = 0; // 0 : Input, 1 : Process
 
         Mat m_mat_image;
-
         string m_DrawMode = "Line";
+        string m_filepath = "";
 
         // ProgramMode 0 일 때, 사용하는 것들
         // 입력 받은 데이터들
@@ -85,8 +85,6 @@ namespace Templete_DLL_LYS
             this.richTextBox_legend.Text = "D : Undo recent Action";
 
             this.__thread_DataProcess = new Thread_DataProcess();
-
-
         }
 
         private void radioButton_Input_CheckedChanged(object sender, EventArgs e)
@@ -210,24 +208,52 @@ namespace Templete_DLL_LYS
 
         private void MainPallete_repaint()
         {
-            using (Graphics g = Graphics.FromImage(bitmap))
+            if (this.m_filepath.Length == 0)
             {
-                g.Clear(Color.White); // TODO : 흰색 도화지 말고 다른 이미지 Load 도 할 수 있게끔
-                int index_point = 0;
-                foreach (int index_logs in m_logs_drawing)
+                using (Graphics g = Graphics.FromImage(bitmap))
                 {
-                    if (index_logs == 1)
+                    g.Clear(Color.White); // TODO : 흰색 도화지 말고 다른 이미지 Load 도 할 수 있게끔
+                    int index_point = 0;
+                    foreach (int index_logs in m_logs_drawing)
                     {
-                        g.DrawEllipse(m_pen_blue, (float)m_points[index_point].X, (float)m_points[index_point].Y, 2 * m_radius, 2 * m_radius);
-                        index_point += index_logs;
+                        if (index_logs == 1)
+                        {
+                            g.DrawEllipse(m_pen_blue, (float)m_points[index_point].X, (float)m_points[index_point].Y, 2 * m_radius, 2 * m_radius);
+                            index_point += index_logs;
+                        }
+                        else if (index_logs == 2)
+                        {
+                            g.DrawLine(m_pen_blue, (float)m_points[index_point].X, (float)m_points[index_point].Y, (float)m_points[index_point + 1].X, (float)m_points[index_point + 1].Y);
+                            index_point += index_logs;
+                        }
                     }
-                    else if (index_logs == 2)
+
+                }
+            }
+            else
+            {
+                using (Graphics g = Graphics.FromImage(bitmap))
+                {
+                    g.Clear(Color.White); 
+                    //g.Clear(Color.White); // TODO : 흰색 도화지 말고 다른 이미지 Load 도 할 수 있게끔+
+                    Image image = ReadImage(this.m_filepath);
+                    g.DrawImage(image, new System.Drawing.Point(0, 0));
+
+                    int index_point = 0;
+                    foreach (int index_logs in m_logs_drawing)
                     {
-                        g.DrawLine(m_pen_blue, (float)m_points[index_point].X, (float)m_points[index_point].Y, (float)m_points[index_point + 1].X, (float)m_points[index_point + 1].Y);
-                        index_point += index_logs;
+                        if (index_logs == 1)
+                        {
+                            g.DrawEllipse(m_pen_blue, (float)m_points[index_point].X, (float)m_points[index_point].Y, 2 * m_radius, 2 * m_radius);
+                            index_point += index_logs;
+                        }
+                        else if (index_logs == 2)
+                        {
+                            g.DrawLine(m_pen_blue, (float)m_points[index_point].X, (float)m_points[index_point].Y, (float)m_points[index_point + 1].X, (float)m_points[index_point + 1].Y);
+                            index_point += index_logs;
+                        }
                     }
                 }
-
             }
 
             MainPalette.Invalidate();
@@ -263,6 +289,7 @@ namespace Templete_DLL_LYS
             this.textBox_DrawMode.Text = "Clear, Reset";
             m_points.Clear();
             m_logs_drawing.Clear();
+            this.m_filepath = "";
 
             MainPallete_repaint();
         }
@@ -271,29 +298,31 @@ namespace Templete_DLL_LYS
         {
             radiobuttonChanged(1);
 
-            string filePath_image = ReadDataPath("Image");
-            Console.WriteLine("filename : ", filePath_image);
+            this.m_filepath = ReadDataPath("Image");
+            Console.WriteLine("filename : ", this.m_filepath);
 
-            if (filePath_image.Length == 0)
+            if (this.m_filepath.Length == 0)
                 return;
 
-            if (filePath_image == "")
+            if (this.m_filepath == "")
             {
                 this.m_mat_image = null;
             }
             else
             {
-                string[] split_data = filePath_image.Split('.');
+                // TODO : 다른 파일 형식에 대한 케이스를 나눠서 할 수 있어야함
+                string[] split_data = this.m_filepath.Split('.');
 
-                if (split_data[1] == "csv")
-                    this.m_mat_image = csvToMat(filePath_image);
-                else
-                    this.m_mat_image = imageToMat(filePath_image);
+                Image image = ReadImage(this.m_filepath);
+                g.DrawImage(image, new System.Drawing.Point(0, 0));
+
             }
 
-            // 프로그램 PictureBox에 이미지 로드
-            Bitmap bitmap = new Bitmap(filePath_image);
-            MainPalette.Image = bitmap;
+
+
+            ////// Memo => 그림을 그릴 수는 없음 (Graphics 객체에 이미지가 있는 것이 아니라 PictureBox 에 있는 것이니까)
+            //this.MainPalette.Image = bitmap;
+            //this.MainPalette.SizeMode = PictureBoxSizeMode.StretchImage; // mainpallette 사이즈를 읽은 이미지에 맞춰서 수정 => PictureBox resize
         }
 
         private string ReadDataPath(string title)
@@ -319,6 +348,28 @@ namespace Templete_DLL_LYS
                 return "";
             }
         }
+
+        private Image ReadImage(string filepath)
+        {
+            Image image;
+            string[] split_data = filepath.Split('.');
+
+            if (split_data[1] == "csv")
+            {
+                //this.m_mat_image = csvToMat(filepath);
+                image = csvToBitmap(filepath); // TODO 검증 필요
+            }
+            else
+            {
+                // 프로그램 PictureBox에 이미지 로드
+                Bitmap bitmap = new Bitmap(filepath);
+                g = MainPalette.CreateGraphics();
+                image = Image.FromFile(filepath);
+                //this.m_mat_image = imageToMat(this.m_filepath); // imageToMat 확인 필요
+            }
+            return image;
+        }
+
 
         private Mat csvToMat(string csvFilePath)
         {
@@ -363,12 +414,35 @@ namespace Templete_DLL_LYS
             }
         }
 
+        private Bitmap csvToBitmap(string csvFilePath)
+        {
+            // TODO : csv to bitmap 잘되는지 검증 필요
+            var lines = File.ReadAllLines(csvFilePath);
+            int width = lines[0].Split(',').Length;
+            int height = lines.Length;
+
+            Bitmap bitmap = new Bitmap(width, height);
+            for (int y = 0; y < height; y++)
+            {
+                var pixels = lines[y].Split(',');
+                for (int x = 0; x < width; x++)
+                {
+                    int pixelValue = int.Parse(pixels[x]);
+                    // 여기서는 그레이스케일 값으로 가정
+                    bitmap.SetPixel(x, y, Color.FromArgb(pixelValue, pixelValue, pixelValue));
+                }
+            }
+
+            return bitmap;
+        }
+
         private Mat imageToMat(string imageFilePath)
         {
             Mat srcImage = Cv2.ImRead(imageFilePath, ImreadModes.Unchanged);
 
             return srcImage;
         }
+
         private void radiobuttonChanged(int mode)
         {
             if (mode == 0)

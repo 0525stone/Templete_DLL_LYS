@@ -41,10 +41,10 @@ class Templete_DLL
         this.__templete_DLL_LYS = IntPtr.Zero;
     }
 
-    public void function()
+    public void function(double[] data3d)
     {
         // TODO
-        string results = Marshal.PtrToStringAnsi(Templete_DLL_LYS_function(this.__inspection3D, data3D));
+        string results = Marshal.PtrToStringAnsi(Templete_DLL_LYS_function(this.__templete_DLL_LYS, data3d));
 
 
     }

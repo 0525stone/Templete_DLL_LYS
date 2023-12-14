@@ -23,6 +23,7 @@ public:
 extern "C"
 {
 	TEMPLETE_DLL_LYS_DECLSPEC Templete_DLL_LYS* Templete_DLL_LYS_Create();
-	TEMPLETE_DLL_LYS_DECLSPEC Templete_DLL_LYS* Templete_DLL_LYS_sayhello();
+	TEMPLETE_DLL_LYS_DECLSPEC char* Templete_DLL_LYS_sayhello();
+	TEMPLETE_DLL_LYS_DECLSPEC char* Templete_DLL_LYS_function(Templete_DLL_LYS* obj, double* data_image);
 
 }

@@ -29,7 +29,9 @@ char* Templete_DLL_LYS::say_hello()
 
 char* Templete_DLL_LYS::function()
 {
-
+	std::cout << "in the c++ code through thread" << std::endl;
+	char* result = NULL;
+	return result;
 }
 
 
@@ -64,7 +66,7 @@ char* Templete_DLL_LYS_function(Templete_DLL_LYS* obj, double* data_image)
 	//// 이미지를 다운샘플링하여 피라미드를 생성합니다.
 	//for (int i = 0; i < 3; ++i) { // 3단계의 피라미드를 생성합니다.
 	//	cv::Mat downsampled;
-	//	pyrDown(pyramids[i], downsampled);
+	//	pyrDown(pyramids[i], downsampled);070
 	//	pyramids.push_back(downsampled);
 	//}
 

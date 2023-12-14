@@ -117,7 +117,7 @@ class Thread_DataProcess
     {
         // TODO : 조건식 추가 필요 Form1.cs 에서 이부분을 콜하면 스레드 시작하여 프로그램 돌아가는 것임
         //if () // Point 들이 3개 이상 있으면 돌아가게끔
-        //this.__isRunning_thread = true;
+        this.__isRunning_thread = true;
 
     }
 
@@ -169,7 +169,8 @@ class Thread_DataProcess
 
             // TODO : Run 할 때 할 작업들 여기에 배치
             this.__Templete_DLL = new Templete_DLL();
-
+            double[] data = new double[100];
+            this.__Templete_DLL.function(data);
             //if ()
 
 
